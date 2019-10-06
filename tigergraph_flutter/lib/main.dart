@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 //Create a basic userScreen
 class UserScreen extends StatefulWidget {
   UserScreen({Key key, this.title}) : super(key: key);
