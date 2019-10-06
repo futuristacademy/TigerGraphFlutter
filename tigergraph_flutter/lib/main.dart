@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'config.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -33,32 +34,13 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   Vertex userVertex;
-  /*
-  Future<StreamedResponse> getStreamedResponseFromUri()
-  {
-    Client dataClient = new Client();
-    Request request = Request('GET',Uri.https('testsocial.i.tgcloud.us:9000', '/graph/vertices/Person/1164982'));
-    return dataClient.send(request);
-  }
+  final String host = hostRaghava; //CHANGE THIS TO YOUR TIGERGRAPH HOST NAME
+  final String authKey = authKeyRaghava; //CHANGE THIS TO YOUR TIGERGRAPH AUTH KEY
 
-  Future<Map> getStream() async
-  {
-    ByteStream stream = await getStreamedResponseFromUri().then((onValue) {
-      return onValue.stream;
-    });
-    stream.bytesToString().then((onValue) {
-      return jsonDecode(onValue);
-    });
-  }
-  */
-
-  Future<Map> fetchPost(vertexType, int vertexID) async { //Returns JSON from HTTP GET call
-    final response = await http.get(
-      'https://testsocial.i.tgcloud.us:9000/graph/vertices/$vertexType/$vertexID', //change the number value to change the vertex ID
+  Future<Map> fetchPost(String vertexType, int vertexID) async { //Returns JSON from HTTP GET call for vertexType and vertexID specified in parameters
+    final response = await http.get(returnHttpUrl(host,vertexType, vertexID),
       headers: {
-        HttpHeaders.authorizationHeader:
-        "Bearer 7rv807b6m7eeq0gmdj64bo17ov2qcehl" //Auth Key
-      },
+        HttpHeaders.authorizationHeader: authKey},
     );
     if (response.statusCode == 200) { // connection is made with server
       return json.decode(response.body);
